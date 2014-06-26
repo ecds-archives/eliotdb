@@ -1,17 +1,29 @@
-from django.conf.urls import patterns, include, url
+#from django.conf.urls import patterns, include, url
+from django.conf.urls.defaults import *
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf.urls import patterns
+from django.core.urlresolvers import reverse
+from django.contrib.sitemaps import Sitemap, FlatPageSitemap, GenericSitemap
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'eliotdb.views.home', name='home'),
-    # url(r'^eliotdb/', include('eliotdb.foo.urls')),
+from eliotdb_app.views import index, searchform, name_record, edit_name, save_name
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+urlpatterns = patterns('eliotdb_app.views',
+    url(r'^$', 'index', name='index'),
+    url(r'^search$', 'searchform', name='search'),
+    url(r'^(?P<tei_id>[^/]+)$', 'name_record', name='name_record'),
+    url(r'^(?P<tei_id>[^/]+)/edit$', 'edit_name', name='edit_name'),
+    url(r'^(?P<tei_id>[^/]+)/save$', 'save_name', name='save_name'),
+    )
 
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
+if settings.DEBUG:
+  urlpatterns += patterns(
+    url(r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.STATIC_ROOT } ),
 )
+
+
