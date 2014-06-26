@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Eliot Names Database</title>
+<meta http-equiv="Content-Type" content="text/html;" charset="iso-8859-1">
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/eliotdb.css">
+</head>
+
+<body>
+<h2 class="subhead">Eliot Names Database</h2>
+<p>Database of names marked up in the T.S. Eliot Prose Collection</p>
+<!-- Searchbox -->
+<div id="searchbox">
+<form name="namesearch" action="{% url "search" %}" method="get"><p
+     class="searchbox"><b>Name search:</b><input id="key" type="text" size="40" name="name"/><input id="go" type='submit' size="40" value='Go'/></p></form>
+</div>
+<hr>
+
+{% block content %}{% endblock %}
+
+</div>
+
+
+<div class="foot">
+<hr class="foot">
+<p class="footnav"><span id="con"><script language="javascript">
+<!--
+var username = "sepalme";
+var hostname = "emory.edu";
+var linktext = "Contact the Emory Center for Digital Scholarship";
+document.write("<a href=" + "mail" + "to:" + username +
+"@" + hostname + ">" + linktext + "</a>")
+//-->
+</script>
+<noscript>Contact the Emory Center for Digital Scholarship: beckctr<img src="{{ STATIC_URL }}images/at.gif" alt=" at "/>emory.edu</noscript></span></p>
+</div>
+<div class="tracking">
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11023816-3");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</div>
+</body> </html>
+ 

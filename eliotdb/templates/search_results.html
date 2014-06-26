@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+{% block content %}
+
+<div class="content">
+
+<p>Search results for name where
+{% if name %} name contains <b>'{{name}}'</b></p>
+{% endif %}
+
+{% if server_error %}{{ server_error }}{% endif %}
+
+{% if searchform.is_valid %}
+
+{% if name_count > 100 %}
+<p>First 100 of {{name_count}} results returned. You may want to refine your
+search.</p>
+{% endif %}
+  
+<ul>  
+{% for name in names %}
+<li><a href={% url "name_record" name.tei_id %}>{{name.surname}}{% if name.forename %}, {{name.forename}}{% endif %}
+  {% if name.birth or name.death %} ({{name.birth}} -
+  {{name.death}}){% endif %}</a>
+</li>
+{% endfor %}
+</ul>
+
+{% endif %}
+</div>
+{% endblock %}
