@@ -70,13 +70,13 @@ def edit_name(request, tei_id):
             name = Name.objects.get(tei_id=tei_id)
             name_form = NameForm(instance=name)
             errors = name_form.errors
-            what = 'Turn Down for What'
+            what = 'invalid form submitted.'
     # no data submitted
     else:
         name = Name.objects.get(tei_id=tei_id)
         name_form = NameForm(instance=name)
         errors = 'no errors to print'
-        what = 'I got nothing'
+        what = 'no request
  
     return render_to_response('edit_name.html', {'form' : name_form, 'name': name, 'errors' : errors, 'what' : what}, context_instance=RequestContext(request))
 
