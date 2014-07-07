@@ -3,3 +3,4 @@ python-dateutil
 soaplib==0.8.1
 rdflib>=3.0
 ply
+-e git://github.com/emory-libraries/django-eultheme.git#egg=django-eultheme

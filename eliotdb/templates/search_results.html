@@ -4,29 +4,44 @@
 {% block content %}
 
 <div class="content">
-
-<p>Search results for name where
-{% if name %} name contains <b>'{{name}}'</b></p>
-{% endif %}
-
 {% if server_error %}{{ server_error }}{% endif %}
-
 {% if searchform.is_valid %}
 
-{% if name_count > 100 %}
-<p>First 100 of {{name_count}} results returned. You may want to refine your
-search.</p>
-{% endif %}
-  
-<ul>  
-{% for name in names %}
+<!--names-->  
+ 
+<p>Search results for name where surname contains <b>'{{name}}'</b></p>
+  <ul>  
+  {% for name in names_s %}
 <li><a href={% url "name_record" name.tei_id %}>{{name.surname}}{% if name.forename %}, {{name.forename}}{% endif %}
-  {% if name.birth or name.death %} ({{name.birth}} -
-  {{name.death}}){% endif %}</a>
+  {% if name.birth or name.death %} ({{name.birth}}-{{name.death}}){% endif %}</a>
 </li>
 {% endfor %}
 </ul>
 
+<p>Search results for name where forename contains <b>'{{name}}'</b></p>
+<ul>
+{% for name in names_f %}
+<li><a href={% url "name_record" name.tei_id %}>{{name.surname}}{% if name.forename %}, {{name.forename}}{% endif %}
+  {% if name.birth or name.death %} ({{name.birth}}-{{name.death}}){% endif %}</a>
+</li>
+{% endfor %}
+</ul>
+
+{% if name %}
+{% if name_count > 40 %}
+<p>First 40 of {{name_count}} results returned. You may want to refine your search.</p>
+{% endif %}
+{% include "name-searchbox.html" %}
+{% endif %}
+<!--end of names-->
+
+<!--documents-->
+{% if document %}
+
+{% endif %}
+<!--end of documents-->
+
 {% endif %}
 </div>
+
 {% endblock %}

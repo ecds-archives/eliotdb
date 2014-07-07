@@ -2,9 +2,10 @@ from django.db import models
 
 class Name(models.Model):
     objects = models.Manager()
-    tei_id = models.CharField(max_length=50)
+    tei_id = models.CharField(max_length=50, unique=True)
     surname = models.CharField(max_length=100)
-    forename = models.CharField(max_length=100) 
+    forename = models.CharField(max_length=100)
+    alt_name = models.CharField(max_length=100) 
     birth = models.CharField(max_length=20)
     death = models.CharField(max_length=20)
     viaf = models.CharField(max_length=100)
@@ -15,7 +16,7 @@ class Name(models.Model):
         db_table = 'names'
 
 class Document(models.Model):
-    tei_id = models.CharField(max_length=50)
+    tei_id = models.CharField(max_length=50, unique=True)
     eliot_vol = models.CharField(max_length=100)
     eliot_part = models.IntegerField(max_length=1)
     eliot_period = models.IntegerField(max_length=4)
