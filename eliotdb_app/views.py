@@ -76,7 +76,7 @@ def edit_name(request, tei_id):
         name = Name.objects.get(tei_id=tei_id)
         name_form = NameForm(instance=name)
         errors = 'no errors to print'
-        what = 'no request
+        what = 'no request'
  
     return render_to_response('edit_name.html', {'form' : name_form, 'name': name, 'errors' : errors, 'what' : what}, context_instance=RequestContext(request))
 
