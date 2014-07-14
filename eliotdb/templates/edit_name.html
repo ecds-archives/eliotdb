@@ -10,6 +10,7 @@
 {% if form.is_valid %}<p>Yes</p>{% else %}<p>No</p>{% endif %}
 {% if what %}<p>{{what}}</p>{% else %}<p>No what</p>{% endif %}
 {% if errors %}<p>{{errors}}</p>{% else %}<p>No errors</p>{% endif %}
+{% if form.is_bound %}<p>Yes</p>{% else %}<p>No</p>{% endif %}
   
 {% for field in form %}
 <div class="fieldWrapper">

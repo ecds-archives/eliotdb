@@ -58,7 +58,7 @@ def name_record(request, tei_id):
     return render_to_response('name_record.html', {'name': name}, context_instance=RequestContext(request))
 
 def edit_name(request, tei_id):
-    if request.POST:
+    if request.method == "POST":
         name_form = NameForm(request.POST)
         # valid data submitted    
         if name_form.is_valid():
