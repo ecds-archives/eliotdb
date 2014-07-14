@@ -15,6 +15,7 @@ from eliotdb_app.models import Name, Document, Mention
 from eliotdb_app.forms import SearchForm, NameForm, DocumentForm, MentionForm
 
 logger = logging.getLogger(__name__)
+# test edit
 
 def index(request):
   return render_to_response('index.html', context_instance=RequestContext(request))
