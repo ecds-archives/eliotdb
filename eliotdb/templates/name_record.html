@@ -13,7 +13,7 @@
   <p><b>ID: </b>{{name.tei_id}}<br>
   <b>Surname: </b>{% if name.surname %}{{name.surname}}{% endif %}<br>
   <b>Forename(s): </b>{% if name.forename %}{{name.forename}}{% endif %}<br>
-  <b>Alternate Name: </b>{% if name.alt_name %}{{name.alt_name}}{% endif %}<br>
+  <b>Alternate Name(s): </b>{% if name.alt_names %}{{name.alt_names}}{% endif %}<br>
   <b>Birth: </b>{% if name.birth %}{{name.birth}}{% endif %}<br>
   <b>Death: </b>{% if name.death %}{{name.death}}{% endif %}<br>
   <b>VIAF: </b>{% if name.viaf %}<a href="{{name.viaf}}" target="_blank">{{name.viaf}}</a>{% endif %}<br>
