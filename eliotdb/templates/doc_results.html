@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+{% block content %}
+
+<div class="content">
+{% if server_error %}{{ server_error }}{% endif %}
+{% if searchform.is_valid %}
+
+{% if documents %}
+{% for doc in documents %}
+  <p>{{doc.src_title_a}}</p>
+  <p>{{doc.tei_id}}</p>
+{% endfor %}
+
+  {% else %}<p>No</p>{% endif %}
+ 
+
+{% endif %}
+</div>
+
+{% endblock %}
