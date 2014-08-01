@@ -12,7 +12,7 @@ from django.shortcuts import redirect, render_to_response
 from django.db.models import Q
 
 from eliotdb_app.models import Name, Document, Mention
-from eliotdb_app.forms import SearchForm, NameForm, DocumentForm, MentionForm
+from eliotdb_app.forms import SearchName, SearchDoc, NameForm, DocumentForm, MentionForm
 
 logger = logging.getLogger(__name__)
 # test edit
@@ -20,30 +20,48 @@ logger = logging.getLogger(__name__)
 def index(request):
   return render_to_response('index.html', context_instance=RequestContext(request))
 
-def searchform(request):
+def searchname(request):
     "Search for name or document."
-    form = SearchForm(request.GET)
+    form = SearchName(request.GET)
     response_code = None
     context = {'searchform': form}
     number_of_results = 100
 
     if form.is_valid():
         name = form.cleaned_data['name']
-        document = form.cleaned_data['document']
+  
         names_s = Name.objects.only("tei_id", "surname", "forename", "birth", "death").filter(surname__icontains="%s" % name)
         names_f = Name.objects.only("tei_id", "surname", "forename", "birth", "death").filter(forename__icontains="%s" % name)
-        # documents = Document.objects("tei_id", ...
-
+       
         context['name'] = name
         context['names_s'] = names_s
         context['names_f'] = names_f
-        # context['document'] = document
-        # context['documents']= documents
         context['name_count'] = len(names_s) + len(names_f)
 
-        response = render_to_response('search_results.html', context, context_instance=RequestContext(request))                         
+        response = render_to_response('name_results.html', context, context_instance=RequestContext(request))                         
     else:
         response = render(request, 'index.html', {"searchform": form})       
+    if response_code is not None:
+        response.status_code = response_code
+    return response
+
+def searchdoc(request):
+    "Search for name or document."
+    form = SearchDoc(request.GET)
+    response_code = None
+    context = {'searchform': form}
+    number_of_results = 100
+
+    if form.is_valid():
+        document = form.cleaned_data['document']
+        documents = Document.objects.only("tei_id", "src_title_a", "src_date").filter(src_title_a__icontains="%s" % document)
+
+        context['document'] = document
+        context['documents'] = documents
+
+        response = render_to_response('doc_results.html', context, context_instance=RequestContext(request))                         
+    else:
+        response = render(request, 'documents.html', {"searchform": form})       
     if response_code is not None:
         response.status_code = response_code
     return response

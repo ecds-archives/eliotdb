@@ -11,13 +11,14 @@ from django.contrib.sitemaps import Sitemap, FlatPageSitemap, GenericSitemap
 # from django.contrib import admin
 # admin.autodiscover()
 
-from eliotdb_app.views import index, names, documents, searchform, name_record, edit_name, save_name
+from eliotdb_app.views import index, names, documents, searchname, searchdoc, name_record, edit_name, save_name
 
 urlpatterns = patterns('eliotdb_app.views',
     url(r'^$', 'index', name='site-index'),
     url(r'^names$', 'names', name='names'),
     url(r'^documents$', 'documents', name='documents'),
-    url(r'^search$', 'searchform', name='search'),
+    url(r'^searchname$', 'searchname', name='searchname'),
+    url(r'^searchdoc$', 'searchdoc', name='searchdoc'),
     url(r'^names/(?P<tei_id>[^/]+)$', 'name_record', name='name_record'),
     url(r'^names/(?P<tei_id>[^/]+)/edit$', 'edit_name', name='edit_name'),
     url(r'^(?P<tei_id>[^/]+)/save$', 'save_name', name='save_name'),

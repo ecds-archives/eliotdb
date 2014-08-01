@@ -3,4 +3,13 @@
 <div class="content">
 <h3>About the Documents</h3>
 <p>Information about the documents in the database.</p>
+
+  {% include "document-searchbox.html" %}
+
+  {% if searchform.is_valid %}
+  <p>Valid</
+  {% else %}
+  {{searchform.errors}}
+  {% endif %}
+ 
 {% endblock %}
