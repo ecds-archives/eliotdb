@@ -46,7 +46,7 @@ def searchname(request):
     return response
 
 def searchdoc(request):
-    "Search for name or document."
+    "Search for document."
     form = SearchDoc(request.GET)
     response_code = None
     context = {'searchform': form}
@@ -77,26 +77,24 @@ def name_record(request, tei_id):
     return render_to_response('name_record.html', {'name': name}, context_instance=RequestContext(request))
 
 def edit_name(request, tei_id):
+    name = Name.objects.get(tei_id=tei_id)
     if request.method == "POST":
-        name_form = NameForm(request.POST)
+        name_form = NameForm(request.POST, instance=name)
         # valid data submitted    
         if name_form.is_valid():
-            name = Name.object.get(tei_id=tei_id)
             name_form.save()
             return redirect('/names/' + tei_id)
         # invalid data submitted
         else:
-            name = Name.objects.get(tei_id=tei_id)
             name_form = NameForm(instance=name)
             errors = name_form.errors
             what = 'invalid form submitted.'
     # no data submitted
     else:
-        name = Name.objects.get(tei_id=tei_id)
         name_form = NameForm(instance=name)
         errors = 'no errors to print'
         what = 'no request'
- 
+    
     return render_to_response('edit_name.html', {'form' : name_form, 'name': name, 'errors' : errors, 'what' : what}, context_instance=RequestContext(request))
 
     

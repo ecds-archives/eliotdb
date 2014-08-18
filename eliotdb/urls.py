@@ -8,12 +8,13 @@ from django.core.urlresolvers import reverse
 from django.contrib.sitemaps import Sitemap, FlatPageSitemap, GenericSitemap
 
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 from eliotdb_app.views import index, names, documents, searchname, searchdoc, name_record, edit_name, save_name
 
 urlpatterns = patterns('eliotdb_app.views',
+    url(r'^admin/', include(admin.site.urls)),
     url(r'^$', 'index', name='site-index'),
     url(r'^names$', 'names', name='names'),
     url(r'^documents$', 'documents', name='documents'),

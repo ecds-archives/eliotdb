@@ -36,7 +36,7 @@ class SearchDoc(forms.Form):
         return cleaned_data    
 
     
-class NameForm(forms.ModelForm):
+class NameForm(forms.ModelForm):  
     class Meta:
         model = Name
 
