@@ -1,15 +1,17 @@
 from django.db import models
+from django.template.defaultfilters import escape
+from django.core.urlresolvers import reverse
 
 class Name(models.Model):
     objects = models.Manager()
     tei_id = models.CharField(max_length=50, unique=True, verbose_name="Tei Id")
     surname = models.CharField(max_length=100, blank=True, verbose_name="Last Name")
     forename = models.CharField(max_length=100, blank=True, verbose_name="First Name(s)")
-    alt_names = models.CharField(max_length=100, null=True, blank=True, verbose_name="Alternative Name(s)") 
+    alt_names = models.CharField(max_length=100, null=True, blank=True, verbose_name="Alternate Name(s)") 
     birth = models.CharField(max_length=20, blank=True)
     death = models.CharField(max_length=20, blank=True)
-    viaf = models.CharField(max_length=100, null=True, blank=True, verbose_name="VIAF")
-    odnb = models.CharField(max_length=100, blank=True, verbose_name="ODNB")
+    viaf = models.CharField(max_length=100, null=True, blank=True, verbose_name="VIAF", help_text="Virtual International Authortiy File")
+    odnb = models.CharField(max_length=100, blank=True, verbose_name="ODNB", help_text="Oxford Dictionary of National Biography")
     seg = models.TextField(max_length=1000, blank=True, verbose_name="Tagged Segment") 
     footnote = models.TextField(max_length=5000, blank=True, verbose_name="Complete Footnote")
     notes = models.TextField(max_length=5000, blank=True, verbose_name="Encoder Notes")
@@ -83,11 +85,20 @@ class Document(models.Model):
         ordering = ['tei_id']
     def __unicode__(self):
         return self.tei_id
+    def get_title(self):
+        if self.src_title_a != None and self.src_title_a != '':
+            return self.src_title_a
+        else:
+            return self.src_title_m
 
 class Mention(models.Model):
     objects = models.Manager()
-    name_id = models.ForeignKey(Name, to_field='tei_id')
-    document = models.ForeignKey(Document, to_field='tei_id')
+    name = models.ForeignKey(Name, to_field='tei_id', verbose_name="Name Id")
+    document = models.ForeignKey(Document, to_field='tei_id', verbose_name="Document Id")
     type = models.CharField(max_length=20)
     class Meta:
         db_table = 'mentions'
+        ordering = ['name', '-type', 'document']
+    def __unicode__(self):
+        return self.type
+    
