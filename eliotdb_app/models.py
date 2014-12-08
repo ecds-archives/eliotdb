@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 
 class Name(models.Model):
     objects = models.Manager()
-    tei_id = models.CharField(max_length=50, unique=True, verbose_name="Tei Id")
+    tei_id = models.CharField(max_length=50, unique=True, verbose_name="ID")
     surname = models.CharField(max_length=100, blank=True, verbose_name="Last Name")
     forename = models.CharField(max_length=100, blank=True, verbose_name="First Name(s)")
     alt_names = models.CharField(max_length=100, null=True, blank=True, verbose_name="Alternate Name(s)") 
@@ -20,6 +20,24 @@ class Name(models.Model):
         ordering = ['tei_id']
     def __unicode__(self):
         return self.tei_id
+    def long_form(self):
+        if self.forename:  
+            forename = self.forename
+        else:
+            forename = ''
+        if self.birth:
+            birth = self.birth
+        else:
+            birth = ' '
+        if self.death:
+            death = self.death
+        else:
+            death = ' '
+        if self.birth or self.death:  
+            bio_dates = '(%s-%s)' % (birth, death) 
+        else:
+            bio_dates = ''
+        return '%s, %s %s' % (self.surname, forename, bio_dates)
     def has_viaf(self):
         if self.viaf != None and self.viaf != "":
             return True
@@ -38,7 +56,7 @@ class Name(models.Model):
 
 class Document(models.Model):
     objects = models.Manager()
-    tei_id = models.CharField(max_length=200, unique=True, verbose_name="Tei Id")
+    tei_id = models.CharField(max_length=200, unique=True, verbose_name="ID")
     eliot_vol = models.CharField(max_length=200, blank=True, verbose_name="Volume")
     eliot_part = models.CharField(max_length=200, blank=True, verbose_name="Part")
     eliot_period = models.CharField(max_length=200, blank=True, verbose_name="Period")
@@ -85,6 +103,8 @@ class Document(models.Model):
         ordering = ['tei_id']
     def __unicode__(self):
         return self.tei_id
+    def stripped_id(self):
+        return self.tei_id.lstrip('eliot_').lstrip('u1926_')
     def get_title(self):
         if self.src_title_a != None and self.src_title_a != '':
             return self.src_title_a

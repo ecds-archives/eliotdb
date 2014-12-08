@@ -1,5 +1,10 @@
 from django.contrib import admin
 from eliotdb_app.models import Name, Document, Mention
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext
+from django.http import HttpResponse
+import csv
+from itertools import chain
 
 class MentionsInline(admin.TabularInline):
     model = Mention
@@ -45,4 +50,70 @@ class MentionAdmin(admin.ModelAdmin):
     list_display = ('type', 'name', 'get_name', 'document')
     search_fields = ['name__tei_id', 'document__tei_id']
 
-admin.site.register(Mention, MentionAdmin)
+    #admin.site.register(Mention, MentionAdmin)
+
+def volume_index(vol_name):
+    context = {}
+    doc_list = []
+    docs = Document.objects.order_by().values_list('tei_id', flat=True).filter(eliot_vol__contains=(vol_name + ':'))
+        
+    all_mentions = Mention.objects.order_by('name', '-type').filter(document__in=docs).select_related()
+    first_mentions = all_mentions.filter(type='first')
+    all_names = sorted(list(set(all_mentions.values_list('name', flat=True).distinct())))
+    index = []
+    for name in all_names:
+        fm = first_mentions.filter(name=name)
+        adds = all_mentions.filter(name=name).filter(type='additional')
+        item = list(chain(fm, adds))
+        index.append(item) 
+
+    context['vol_name'] = vol_name
+    context['first_mentions'] = first_mentions
+    context['all_mentions'] = all_mentions
+    context['all_names'] = all_names
+    context['index'] = index
+    context['docs'] = docs
+    
+    return context
+
+# def volume_csv(request, context):
+#     download_name = context['vol_name'] + '.csv'
+#     response = HttpResponse(mimetype='text/csv')
+#     response['Content-Disposition'] = 'attachment;filename=download_name'
+
+#     writer = csv.writer(response)
+#     writer.writerow(['Name', 'Documents'])
+#     for name in context['index']:
+#         first_mention = name[0]
+#         name = first_mention.name.long_form
+#         add_mentions = []
+#         try:
+#             for mention in name[1:]:
+#                 doc = mention.document.stripped_id
+#                 add_mentions.append(mention)
+#                 add_mentions = ', '.join(add_mentions)
+#         except:
+#             add_mentions = ''
+#         docs = '%s, %s' % (first_mention.document.stripped_id, add_mentions)
+#         writer.writerow([name, docs])
+#     return response
+
+def volume_one_names(request):
+    context = volume_index('Volume I')
+    return render_to_response('admin/volume_names.html', context, context_instance=RequestContext(request))
+admin.site.register_view('volume_one_names', 'Volume I Index', view=volume_one_names)
+
+def volume_two_names(request):
+    context = volume_index('Volume II')       
+    return render_to_response('admin/volume_names.html', context, context_instance=RequestContext(request))
+admin.site.register_view('volume_two_names', 'Volume II Index', view=volume_two_names)
+
+def volume_three_names(request):
+    context = volume_index('Volume III')       
+    return render_to_response('admin/volume_names.html', context, context_instance=RequestContext(request))
+admin.site.register_view('volume_three_names', 'Volume III Index', view=volume_three_names)
+
+def volume_four_names(request):
+    context = volume_index('Volume IV')       
+    return render_to_response('admin/volume_names.html', context, context_instance=RequestContext(request))
+admin.site.register_view('volume_four_names', 'Volume IV Index', view=volume_four_names)
