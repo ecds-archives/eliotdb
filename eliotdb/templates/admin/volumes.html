@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<h4>Select a Volume</h4>
+
+
+<form action={% url 'admin:volumes' %}>
+<select onchange="submit();">
+{% for volume in volumes %}
+<option><a href={% url 'admin:index' %}>{{volume}}</a></option>
+{% endfor %}
+</select>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results{% endblock %}
+{% block content %}
+{% block names-content %}
+
+<div class="content">
+
+  {% if name %}
+
+  <h3 align="center">{% if name.forename %}{{name.forename}}{% endif %} {{name.surname}}</h3>
+  
+  <p><b>ID: </b>{{name.tei_id}}<br>
+  <b>Surname: </b>{% if name.surname %}{{name.surname}}{% endif %}<br>
+  <b>Forename(s): </b>{% if name.forename %}{{name.forename}}{% endif %}<br>
+  <b>Alternate Name(s): </b>{% if name.alt_names %}{{name.alt_names}}{% endif %}<br>
+  <b>Birth: </b>{% if name.birth %}{{name.birth}}{% endif %}<br>
+  <b>Death: </b>{% if name.death %}{{name.death}}{% endif %}<br>
+  <b>VIAF: </b>{% if name.viaf %}<a href="{{name.viaf}}" target="_blank">{{name.viaf}}</a>{% endif %}<br>
+  <b>ODNB: </b>{% if name.odnb %}<a href="{{name.odnb}}" target="_blank">{{name.odnb}}</a>{% endif %}<br>
+  <b>Encoded segment: </b>{% if name.seg %}<br>{{name.seg}}{% endif %}<br>
+  <b>Notes: </b>{% if name.notes %}<br>{{name.notes}}{% endif %}</p>
+  
+  {% endif %}
+
+  <p/>
+  <p><button><a href={% url "edit_name" name.tei_id %}>Edit Record</a></button></p>
+  
+</div>
+{% endblock %}
+{% endblock %}

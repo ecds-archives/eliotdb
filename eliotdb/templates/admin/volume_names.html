@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls admin_static admin_list %}
+{% load custom_tags %}
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{{STATIC_URL}}admin/index.css"/>
+<script type="text/javascript" src="{{STATIC_URL}}admin/index.js"></script>
+<h2 align="center">{{vol_name}} Index</h4>
+
+<!-- {% for name in index %} -->
+<!-- <p>{{name}}</p> -->
+<!-- {% endfor %} -->
+
+
+<h3><a id="indexLink" onclick="toggleTable('fmTable');" href="#">First
+Mentions&nbsp;<span class="btn btn-xs btn-default">
+<span class="glyphicon glyphglyphicon glyphicon-resize-full"></i></span></a></h3>
+<table id="fmTable" style="display:none;" class="table table-striped table-bordered table-hover table-condensed">
+  <tr>
+    <th><b>Name</b></th>
+    <th><b>Document</b></th>
+    </tr>
+{% for mention in first_mentions %}
+<tr>
+    <td><a href={% url 'admin:eliotdb_app_name_change' mention.name.pk %}>{{mention.name.long_form}}</a></td>
+      <td><a href={% url 'admin:eliotdb_app_document_change' mention.document.pk %}>{{mention.document.stripped_id}}</a></td>
+	</tr>
+{% endfor %}
+</table>
+
+<h3><a id="indexLink" onclick="toggleTable('amTable');" href="#">All Mentions&nbsp;<span class="btn btn-xs btn-default">
+<span class="glyphicon glyphglyphicon glyphicon-resize-full"></i></span></a></h3>
+<table id="amTable" style="display:none;" class="table table-striped table-bordered table-hover table-condensed">
+  <caption text-align="left">First mentions in bold</caption>
+  <tr>
+    <th><b>Name</b></th>
+    <th><b>Documents</b></th>
+    </tr>
+{% for name in index %}
+{% with name|first as first %}
+    <tr>
+    <td width="50%">
+      <a href={% url 'admin:eliotdb_app_name_change' first.name.pk%}>{{first.name.long_form}}</a></td>
+      <td>
+	{% if first.type == "first" %}<b>{% endif %}
+	<a href={% url 'admin:eliotdb_app_document_change'
+first.document.pk%}>{{first.document.stripped_id}}</a>{% if first.type == "first" %}</b>{% endif %}{% if name.1 %},{% endif %} 
+	{% for mention in name|slice:"1:" %}
+	<a href={% url 'admin:eliotdb_app_document_change' mention.document.pk%}>{{mention.document.stripped_id}}</a>{% if not forloop.last %},{% endif %}
+	{% endfor %}
+      </td>
+      {% endwith %}
+	</tr>
+{% endfor %}
+</table>
+
+{% endblock %}
